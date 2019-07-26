@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import { compare } from "bcrypt"
 
 import { jwtSecret } from "../config"
-import { addUser, findUserByUsername } from "../model"
+import { addUser, findUserByUsername, findJokesForUser } from "../model"
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -29,6 +29,15 @@ export const loginUser = async (req, res, next) => {
         const payload = { userId: foundUser.id }
         const token = jwt.sign(payload, jwtSecret, { expiresIn: "1d" })
         res.json({ token })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const viewUserJokes = async (req, res, next) => {
+    try {
+        const jokes = await findJokesForUser(req.userId)
+        res.json(jokes)
     } catch (error) {
         next(error)
     }

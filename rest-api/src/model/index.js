@@ -19,4 +19,10 @@ const addUser = async ({ username, password }) => {
         .first()
 }
 
-export { addUser }
+const findUserByUsername = username => {
+    return db("users")
+        .where("username", username)
+        .first()
+}
+
+export { addUser, findUserByUsername }

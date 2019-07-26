@@ -25,4 +25,18 @@ const findUserByUsername = username => {
         .first()
 }
 
-export { addUser, findUserByUsername }
+const findUserByUserId = userId => {
+    return db("users")
+        .where("id", userId)
+        .first()
+}
+
+const findJokesForUser = async userId => {
+    const { id } = await findUserByUserId(userId)
+    if (!id) throw Error(`This user does not exist!`)
+    return db("jokes")
+        .where("user_id", id)
+        .columns(["setup", "punchline", "id", "votes"])
+}
+
+export { addUser, findUserByUsername, findUserByUserId, findJokesForUser }
